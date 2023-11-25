@@ -3,10 +3,10 @@
 **This Library is tested on stm32H7 series.**
 
 This library communicates with the GPRS SIM800 module via UART. The module communication is based on AT command protocol. For proper operation of the library the NET and STATUS pins of the module should be connected to the microcontroller and these pins must be configured as input. The POWER pin of the module also should be connected and configured as output to be able to turn the module on or off.
-In the configurartion the receive interrupt must be enabled and the `SIM800_handle_uart_int` function must be called in the interrupt.
+In the configuration the receive interrupt must be enabled and the `SIM800_handle_uart_int` function must be called in the interrupt.
 The NET pin interrupt must also be configured and `SIM800_handle_net_light_int` function must be called in the NET pin interrupt.
 
-This library supports receiving and sending SMS messages. It also supports pesian UNICODE SMS.
+This library supports receiving and sending SMS messages. It also supports Persian UNICODE SMS.
 You can make phone calls with the module also.
 
 I recommend to configure the microcontroller with STM32CubeMX tool. You can use the library like the piece of code below:
@@ -21,7 +21,7 @@ int main(void)
   HAL_Init();
   SystemClock_Config();
 /*
-* CubeMX Initilization functions
+* CubeMX Initialization functions
 */
   MX_TIM6_Init();
   MX_UART1_Init();
@@ -34,14 +34,14 @@ uint16_t msg_persian[700];
 uint8_t num_sms = Sim800_Check_New_SMS( sms_index , 10);
 printf(" %d New SMS", num_sms);
 for( uint8_t i = 0 ; i < num_sms ; i++){
-	  uint8_t encoding = Sim800_Read_SMS( sms_index[i] , number , msg);
-	  	if( encoding == 1){
-	  		printf("%s : %s",number , msg);
-	  	}else if(encoding == 2){
-	  		ConvertUC2UTF8((uint16_t*)msg, 256, (char *)msg_persian, 700); // implement unicode to UTF-8
+	uint8_t encoding = Sim800_Read_SMS( sms_index[i] , number , msg);
+	if( encoding == 1){
+		printf("%s : %s",number , msg);
+	}else if(encoding == 2){
+	ConvertUC2UTF8((uint16_t*)msg, 256, (char *)msg_persian, 700); // implement unicode to UTF-8
         printf("%s : %s",number , msg_persian);
-	  	}
-  	}
+	}
+}
 /* USER CODE END 2 */
 while (1)
   {
